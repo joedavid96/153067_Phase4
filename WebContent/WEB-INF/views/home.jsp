@@ -1,6 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-    <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
     <html>
     <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -11,6 +9,21 @@
         {
             background-color: greenyellow;
         }
+		.footer
+		{
+		   position: fixed;
+		   left: 0;
+		   bottom: 0;
+		   width: 100%;
+		   background-color: #ecf0f1;
+		   color: #2c3e50;
+		   text-align: center;
+		}
+		#transact
+		{
+			margin: auto;
+		}
+			
     </style>
     </head>
     <body>
@@ -20,18 +33,62 @@
         </div>
     <div class="container-fluid">
         <div class="row">
+		<div class="col-md-3">
                 <div class="card">
                         <img src="https://dummyimage.com/350x450/" alt="Angel #1" class="img-fluid" style="" />
-                        <a href="...link">
+                        <a href="viewBalance.jsp">
                         <div class="card-img-overlay h-100 d-flex flex-column justify-content-end">
                             <div class="card-text border-0 bg-semitransparent text-center">
-                                Anchor Text
+                               View Balance
                             </div>
                         </div>
                         </a>
+                </div>
+			</div>
+			<div class="col-md-3">
+                <div class="card">
+                        <img src="https://dummyimage.com/350x450/" alt="Angel #1" class="img-fluid" style="" />
+                        <a href="deposit.jsp">
+                        <div class="card-img-overlay h-100 d-flex flex-column justify-content-end">
+                            <div class="card-text border-0 bg-semitransparent text-center">
+                               Deposit Funds
+                            </div>
                         </div>
+                        </a>
+                </div>
+			</div>
+			<div class="col-md-3">
+                <div class="card">
+                        <img src="https://dummyimage.com/350x450/" alt="Angel #1" class="img-fluid" style="" />
+                        <a href="withdraw.jsp">
+                        <div class="card-img-overlay h-100 d-flex flex-column justify-content-end">
+                            <div class="card-text border-0 bg-semitransparent text-center">
+                            Withdraw Funds
+                            </div>
+                        </div>
+                        </a>
+                </div>
+			</div>
+			<div class="col-md-3">
+                <div class="card">
+                        <img src="https://dummyimage.com/350x450/" alt="Angel #1" class="img-fluid" style="" />
+                        <a href="transfer.jsp">
+                        <div class="card-img-overlay h-100 d-flex flex-column justify-content-end">
+                            <div class="card-text border-0 bg-semitransparent text-center">
+                           Transfer Funds
+                            </div>
+                        </div>
+                        </a>
+                </div>
+			</div>
         </div>
-        <div class="row"></div>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+        <div class="row"><div id="transact"><button class="btn btn-default">View All Transactions</button></div></div>
+<div class="footer">myWallet</div>
     </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
