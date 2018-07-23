@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="form" uri = "http://www.springframework.org/tags/form" %>
     <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
     <html>
     <head>
@@ -41,9 +42,6 @@
                     <br/>
                     <div class="form-group">
                         <input type="text" class="form-control" name="mobileNo" placeholder="Mobile No">
-                    </div>
-                    <div class="form-group">
-                        <input type="password" class="form-control" name="password" placeholder="Password">
                     </div>
                     <br/>
                     <div class="align-center">
