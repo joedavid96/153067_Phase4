@@ -35,7 +35,7 @@
         <div class="row">
 		<div class="col-md-3">
                 <div class="card">
-                        <img src="https://dummyimage.com/350x450/" alt="Angel #1" class="img-fluid" style="" />
+                        <img src="balance.jpg" alt="View Balance" class="img-fluid" style="" />
                         <a href="viewBalance.jsp">
                         <div class="card-img-overlay h-100 d-flex flex-column justify-content-end">
                             <div class="card-text border-0 bg-semitransparent text-center">
@@ -47,7 +47,7 @@
 			</div>
 			<div class="col-md-3">
                 <div class="card">
-                        <img src="https://dummyimage.com/350x450/" alt="Angel #1" class="img-fluid" style="" />
+                        <img src="deposit.jpg" alt="Deposit Funds" class="img-fluid" style="" />
                         <a href="deposit.jsp">
                         <div class="card-img-overlay h-100 d-flex flex-column justify-content-end">
                             <div class="card-text border-0 bg-semitransparent text-center">
@@ -59,7 +59,7 @@
 			</div>
 			<div class="col-md-3">
                 <div class="card">
-                        <img src="https://dummyimage.com/350x450/" alt="Angel #1" class="img-fluid" style="" />
+                        <img src="withdraw.jpg" alt="Withdraw Funds" class="img-fluid" style="" />
                         <a href="withdraw.jsp">
                         <div class="card-img-overlay h-100 d-flex flex-column justify-content-end">
                             <div class="card-text border-0 bg-semitransparent text-center">
@@ -71,7 +71,7 @@
 			</div>
 			<div class="col-md-3">
                 <div class="card">
-                        <img src="https://dummyimage.com/350x450/" alt="Angel #1" class="img-fluid" style="" />
+                        <img src="transfer.jpg" alt="Transfer Funds" class="img-fluid" style="" />
                         <a href="transfer.jsp">
                         <div class="card-img-overlay h-100 d-flex flex-column justify-content-end">
                             <div class="card-text border-0 bg-semitransparent text-center">
@@ -87,7 +87,7 @@
 		<br>
 		<br>
 		<br>
-        <div class="row"><div id="transact"><button class="btn btn-default">View All Transactions</button></div></div>
+        <div class="row"><div id="transact"><button class="btn btn-info">View All Transactions</button></div></div>
 <div class="footer">myWallet</div>
     </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
