@@ -7,7 +7,7 @@
     <style>
         #head
         {
-            background-color: greenyellow;
+            background-color:#18dcff;
         }
 		.footer
 		{
@@ -15,8 +15,8 @@
 		   left: 0;
 		   bottom: 0;
 		   width: 100%;
-		   background-color: #ecf0f1;
-		   color: #2c3e50;
+		   background-color: #000000;
+		   color: #FFFFFF;
 		   text-align: center;
 		}
 		#transact
@@ -38,9 +38,7 @@
                         <img src="balance.jpg" alt="View Balance" class="img-fluid" style="" />
                         <a href="viewBalance.jsp">
                         <div class="card-img-overlay h-100 d-flex flex-column justify-content-end">
-                            <div class="card-text border-0 bg-semitransparent text-center">
-                               View Balance
-                            </div>
+                            
                         </div>
                         </a>
                 </div>
@@ -50,9 +48,7 @@
                         <img src="deposit.jpg" alt="Deposit Funds" class="img-fluid" style="" />
                         <a href="deposit.jsp">
                         <div class="card-img-overlay h-100 d-flex flex-column justify-content-end">
-                            <div class="card-text border-0 bg-semitransparent text-center">
-                               Deposit Funds
-                            </div>
+                           
                         </div>
                         </a>
                 </div>
@@ -62,9 +58,7 @@
                         <img src="withdraw.jpg" alt="Withdraw Funds" class="img-fluid" style="" />
                         <a href="withdraw.jsp">
                         <div class="card-img-overlay h-100 d-flex flex-column justify-content-end">
-                            <div class="card-text border-0 bg-semitransparent text-center">
-                            Withdraw Funds
-                            </div>
+                            
                         </div>
                         </a>
                 </div>
@@ -74,9 +68,7 @@
                         <img src="transfer.jpg" alt="Transfer Funds" class="img-fluid" style="" />
                         <a href="transfer.jsp">
                         <div class="card-img-overlay h-100 d-flex flex-column justify-content-end">
-                            <div class="card-text border-0 bg-semitransparent text-center">
-                           Transfer Funds
-                            </div>
+                           
                         </div>
                         </a>
                 </div>
