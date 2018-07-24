@@ -19,9 +19,24 @@ public class URIController {
 		return "login";
 	}
 
-	@RequestMapping(value = "/signin")
-	public String getSigninPage() {
-		return "signin";
+	@RequestMapping(value = "/signup")
+	public String getSignUpPage() {
+		return "signup";
+	}
+	
+	@RequestMapping(value = "/deposit")
+	public String getDeposit() {
+		return "deposit";
+	}
+	
+	@RequestMapping(value = "/withdraw")
+	public String getWithdraw() {
+		return "withdraw";
+	}
+	
+	@RequestMapping(value = "/transfer")
+	public String getFundTransfer() {
+		return "transfer";
 	}
 
 	@ModelAttribute("customer")
