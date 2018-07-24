@@ -1,20 +1,19 @@
 package com.cg.mywalletapp.service;
 import java.math.BigDecimal;
+import java.util.Iterator;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-
 import com.cg.mywalletapp.beans.Customer;
 import com.cg.mywalletapp.beans.Transactions;
-import com.cg.mywalletapp.beans.Wallet;
 import com.cg.mywalletapp.exception.InsufficientBalanceException;
-import com.cg.mywalletapp.exception.InvalidInputException;
+import com.cg.mywalletapp.exception.WalletAlreadyExistsException;
+import com.cg.mywalletapp.exception.WalletNotFoundException;
+import com.cg.mywalletapp.exception.WalletServicesDownException;
 import com.cg.mywalletapp.repo.WalletRepo;
 import com.cg.mywalletapp.repo.TransactionRepo;
-@Service("ser")
-@Component(value="ser")
+
+@Component(value="service")
 public class WalletServiceImpl implements WalletService{
 	
 	@Autowired
@@ -22,122 +21,210 @@ public class WalletServiceImpl implements WalletService{
 	@Autowired
 	private TransactionRepo repot;
 
-	Transactions trns;
-	
-	public WalletServiceImpl() {
-		super();
-	}
-
-	public WalletServiceImpl(WalletRepo repo) {
-		super();
-		this.repo = repo;
-	}
-
-
-
-	public Customer createAccount(Customer customer) {
+	public Customer createAccount(Customer customer) throws WalletServicesDownException, WalletAlreadyExistsException {
 		
-		
-
-		return repo.save(customer);
-		}
-	
-	 
-	public Customer showBalance(String mobileNo)  {
-		Customer customer=repo.findOne(mobileNo);
-		
-			return customer;	
-	}
-	public Customer fundTransfer(String sourceMobileNo, String targetMobileNo, BigDecimal amount) throws InvalidInputException, InsufficientBalanceException {
-
-		Customer cust1=repo.findOne(sourceMobileNo);
-		Customer cust2=repo.findOne(targetMobileNo);
-		if(cust1!=null)
+		Customer c =repo.findOne(customer.getMobileNo());
+		if(c!=null)
 		{
-			if(cust2!=null)
+			throw new WalletAlreadyExistsException("Wallet linked to the Entered Mobile Number ALREADY EXISTS: Please try again."); 
+		}
+		else
+		{
+			Transactions t1 = new Transactions(customer.getMobileNo(),
+					new java.util.Date() + "\tWallet Created. Balance in Wallet : " + customer.getWallet().getBalance());
+			Transactions t2 = repot.save(t1);
+			Customer d = repo.save(customer);
+			if(d==customer && t2==t1)
 			{
-				BigDecimal bal1 = cust1.getWallet().getBalance();
-				BigDecimal bal2 = cust2.getWallet().getBalance();
-				if(bal1.compareTo(amount)>=0)
-				{
-					bal1 = bal1.subtract(amount);
-				cust1.setWallet(new Wallet(bal1));
-				repo.save(cust1);
-					bal2=bal2.add(amount);
-				cust2.setWallet(new Wallet(bal2));
-				repo.save(cust2);				
-//				String trans1=new java.util.Date() + "  your account  " + sourceMobileNo +"  is debited with " + amount + "  towards transfer with  "+ targetMobileNo +"  Balance is : "+bal1;
-//				trns.setMobileNo(sourceMobileNo);
-//				trns.setStatements(trans1);
-//				repot.save(trns);
-//				String trans2=new java.util.Date() + "  your account  " + targetMobileNo +"  is deposited with " + amount + "  towards transfer from  "+ sourceMobileNo +"  Balance is : "+bal2;
-//				trns.setMobileNo(targetMobileNo);
-//				trns.setStatements(trans2);
-//				repot.save(trns);
-				
+				return d;
+			}
+			else
+			{
+				throw new WalletServicesDownException(" Registration UNSUCCESSFUL!! Please Try at a later time. Thank you.");
+			}
+		}
+	}
+	
+	public Customer showBalance(String mobileNo) throws WalletNotFoundException  {
+			Customer customer=repo.findOne(mobileNo);
+			String log = new java.util.Date() + "\tViewed Balance.";
+			Transactions t1 = new Transactions(mobileNo, log);
+			Transactions t2 = repot.save(t1);
+			if(customer!=null && t2==t1)
+			{				
+				return customer;
+			}
+			else
+			{
+				throw new WalletNotFoundException(" Wallet with Entered Mobile Number Does NOT EXIST: Please try again. ");
+			}
+	}
+	public Customer fundTransfer(String sourceMobileNo, String targetMobileNo, BigDecimal amount) throws WalletNotFoundException, InsufficientBalanceException, WalletServicesDownException {
+
+		
+		if(repo.findOne(sourceMobileNo)!=null)
+		{
+			if(repo.findOne(targetMobileNo)!=null)
+			{
+				Customer bx = repo.findOne(sourceMobileNo);
+				Customer cx = repo.findOne(targetMobileNo);
+
+				BigDecimal b = bx.getWallet().getBalance();
+				BigDecimal c = cx.getWallet().getBalance();
+
+				int i = b.compareTo(amount);
+
+				if (i >= 0) {
+					b = b.subtract(amount);
+					bx.getWallet().setBalance(b);
+
+					String log1 = new java.util.Date() + "\tAmount of " + amount
+							+ " Debited from Wallet towards Wallet linked with Number " + sourceMobileNo
+							+ ". Balance in Wallet : " + b;
+					Transactions t1 = new Transactions(sourceMobileNo, log1);
+					Transactions t2 = repot.save(t1);
+					Customer flag1 = repo.save(bx);
+
+					c = c.add(amount);
+					cx.getWallet().setBalance(c);
+
+					String log2 = new java.util.Date() + "\tAmount of " + amount
+							+ " Credited to Wallet from Wallet linked with Number " + targetMobileNo
+							+ ". Balance in Wallet : " + c;
+					Transactions t3 = new Transactions(targetMobileNo, log2);
+					Transactions t4 = repot.save(t3);
+					Customer flag2 = repo.save(cx);
+					
+					if ((flag1 == bx) && (flag2 == cx) && (t2 == t1) && (t4 == t3))
+					{
+						return flag1;
+					}
+					else
+					{
+						throw new WalletServicesDownException("Transaction Unsuccessful! Please try again. Thank you.");
+					}
 				}
 				else
 				{
-					throw new InsufficientBalanceException("insufficient balance");					
+					throw new InsufficientBalanceException("Insufficient balance. Please try again.");					
 				}
 			}
 			else
 			{
-				throw new InvalidInputException("Destination mobile number not found");
+				throw new WalletNotFoundException("Wallet with Entered Mobile Number(Recipient) Does NOT EXIST: Please try again.");
 			}
 		}else
 		{
-			throw new InvalidInputException("Source mobile number not found");
+			throw new WalletNotFoundException("Wallet with Entered Mobile Number Does NOT EXIST: Please try again.");
 		}
-		
-		
-		return cust1;
 	}
 
-	public Customer depositAmount(String mobileNo, BigDecimal amount) throws InvalidInputException {
+	public Customer depositAmount(String mobileNo, BigDecimal amount) throws WalletNotFoundException, WalletServicesDownException {
 
-		Customer cust=repo.findOne(mobileNo);
+		if(repo.findOne(mobileNo)==null)
+		{
+			throw new WalletNotFoundException("Wallet with Entered Mobile Number Does NOT EXIST: Please try again.");
+		}
+		else
+		{
+			Customer cust=repo.findOne(mobileNo);
 			BigDecimal bal = cust.getWallet().getBalance().add(amount);
-			
-			cust.setWallet(new Wallet(bal));
-			repo.save(cust);
-//			String trans=new java.util.Date() + "  your account  "+ mobileNo +"  is deposited with  " + amount +"  your Balance is : "+cust.getWallet().getBalance();
-//			trns.setMobileNo(mobileNo);
-//			trns.setStatements(trans);
-//			repot.save(trns);		
-			
-		return cust;	
+			cust.getWallet().setBalance(bal);
+			Customer flag = repo.save(cust);
+			String log = new java.util.Date() + "\tAmount of " + amount + " Credited to Wallet. Balance in Wallet : " + bal;
+			Transactions t1 = new Transactions(mobileNo, log);
+			Transactions t2 = repot.save(t1);		
+			if(flag==cust && t2==t1)
+			{
+				return flag;
+			}
+			else
+			{
+				throw new WalletServicesDownException("Transaction Unsuccessful! Please try again. Thank you.");
+			}
+			}
 	}
 
-	public Customer withdrawAmount(String mobileNo, BigDecimal amount) throws InvalidInputException, InsufficientBalanceException {
-		if(amount==null)
-			throw new InvalidInputException("Amount cannot be null");
+	public Customer withdrawAmount(String mobileNo, BigDecimal amount) throws WalletNotFoundException, InsufficientBalanceException, WalletServicesDownException {
 		
-		if(mobileNo==null)
-			throw new InvalidInputException("SourceMobile mobile number cannot be null");
-
+		if(repo.findOne(mobileNo)==null)
+		{
+			throw new WalletNotFoundException("Wallet with Entered Mobile Number Does NOT EXIST: Please try again.");
+		}
 		Customer cust=repo.findOne(mobileNo);
-		if(cust.getMobileNo()==null)
-			throw new InvalidInputException("Mobile number not found");
 		BigDecimal bal = cust.getWallet().getBalance();
-	if(bal.compareTo(amount)>=0)
-	{
-		bal = bal.subtract(amount);
-	cust.setWallet(new Wallet(bal));
-	repo.save(cust);
-//	String trans=new java.util.Date() + "  your account  "+ mobileNo +"  is withdrawed with  " + amount +"  your Balance is : "+cust.getWallet().getBalance();
-//	trns.setMobileNo(mobileNo);
-//	trns.setStatements(trans);
-//	repot.save(trns);
+		if(bal.compareTo(amount)>=0)
+		{
+			bal = bal.subtract(amount);
+			cust.getWallet().setBalance(bal);
+			String log = new java.util.Date() + "\tAmount of  " + amount
+					+ " Debited from Wallet. Balance in Wallet : " + bal;
+			Transactions t1 = new Transactions(mobileNo, log);
+			Transactions t2 = repot.save(t1);
+			Customer flag = repo.save(cust);
+			if(flag==cust && t2==t1)
+			{
+				return flag;
+			}
+			else
+			{
+				throw new WalletServicesDownException("Transaction Unsuccessful! Please try again. Thank you.");
+			}
+
 	}
 	else
 	{
-		throw new InsufficientBalanceException("Insufficient balance");		
+		throw new InsufficientBalanceException("Insufficient Balance. Please try again.");		
 	}
-	return cust;
 }
 	@Override
-	public List<String> getTransaction(String mob) {
-		return (List<String>) repot.findTranscations(mob);
+	public List<String> getTransaction(String mobileNo) throws WalletServicesDownException {
+		List<String> l = repot.findTranscations(mobileNo);
+		if(l==null)
+		{
+			throw new WalletServicesDownException("Operation Unsuccessful!! Please TRY again at a LATER TIME! Thanks.");
+		}
+		else
+		{
+			return l;
+		}
+	}
+
+	@Override
+	public List<Customer> getAllCustomers() throws WalletServicesDownException {
+		List<Customer> l = repo.findAll();
+		if(l==null)
+		{
+			throw new WalletServicesDownException("Operation Unsuccessful!! Please TRY again at a LATER TIME! Thanks.");
+		}
+		else
+		{
+			return l;
+		}
+	}
+
+	@SuppressWarnings("null")
+	@Override
+	public List<Customer> getCustomersWhoseBalanceLessThan() throws WalletServicesDownException {
+		List<Customer> l = repo.findAll();
+		List<Customer> m = null;
+		if(l==null)
+		{
+			throw new WalletServicesDownException("Operation Unsuccessful!! Please TRY again at a LATER TIME! Thanks.");
+		}
+		else
+		{
+			
+			Iterator<Customer> it = l.iterator();
+			while(it.hasNext())
+			{
+				Customer c = it.next();
+				if(c.getWallet().getBalance().compareTo(new BigDecimal(1000))<0)
+				{
+					m.add(c);
+				}
+			}
+			return m;
+		}
 	}
 }
