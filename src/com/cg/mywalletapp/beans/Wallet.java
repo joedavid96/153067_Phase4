@@ -14,6 +14,7 @@ public class Wallet {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private int walletId;
+	@NotEmpty
 	private BigDecimal balance;
 
 	public Wallet() {
