@@ -12,6 +12,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Entity
 @Table(name = "Customer")
 public class Customer {
+	
+	@Pattern(regexp = "[A-Z][a-z]*")
 	@NotEmpty
 	private String name;
 
